@@ -5,8 +5,8 @@ const router = new Router();
 
 router.route('/')
   .get((req, res, next) => {
-    if (req.query.id) {
-      Memory.where({ id: req.query.id }).fetch()
+    if (req.query.memory_id) {
+      Memory.where({ id: req.query.memory_id }).fetch()
         .then((data) => {
           res.status(200).send({
             memory: data.toJSON(),
