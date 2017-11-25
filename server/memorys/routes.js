@@ -13,7 +13,7 @@ router.route('/')
           });
         });
     } else {
-      Memory.where().fetchAll().then((data) => {
+      Memory.fetchAll().then((data) => {
       res.status(200).send({
         memorys: data.toJSON(),
       })
