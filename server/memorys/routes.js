@@ -6,14 +6,14 @@ const router = new Router();
 router.route('/')
   .get((req, res, next) => {
     if (req.query.memory_id) {
-      Memory.where({ id: req.query.memory_id }).fetch()
+      Memory.where({ id: req.query.memory_id }).fetch({ withRelated: ['writer'] })
         .then((data) => {
           res.status(200).send({
             memory: data.toJSON(),
           });
         });
     } else {
-      Memory.fetchAll().then((data) => {
+      Memory.fetchAll({ withRelated: ['writer'] }).then((data) => {
       res.status(200).send({
         memorys: data.toJSON(),
       })
