@@ -5,6 +5,6 @@ export const Memory = bookshelf.Model.extend({
   tableName: 'memorys',
   hasTimeStamps: true,
   writer() {
-    return this.hasOne(Writer, 'writer_id');
+    return this.belongsTo(Writer, 'writer_id');
   },
 });
