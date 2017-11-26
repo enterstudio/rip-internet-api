@@ -38,8 +38,8 @@ router.route('/')
               memory: {
                 message: newMemory.toJSON().message,
                 writer: {
-                  name: fetchedWriter.toJSON().name,
-                  email: fetchedWriter.toJSON().email,
+                  name: newWriter.toJSON().name,
+                  email: newWriter.toJSON().email,
                 },
               },
             });
