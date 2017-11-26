@@ -26,7 +26,7 @@ router.route('/')
     }
   })
   .post((req, res, next) => {
-    const writerId = getSertWriter(req.body.writer);
+    const writerId = getSertWriter(req.body.writer).then(d => d);
     Memory.forge({ message: req.body.memory, writer_id: writerId }).save().then((newMemory) => {
       res.status(200).send({ memory: newMemory.toJSON() });
     });
