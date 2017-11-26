@@ -4,14 +4,6 @@ import { Writer } from '../writers/models';
 
 const router = new Router();
 
-async function getSertWriter(writerObj) {
-  const writer = await Writer.where({ email: writerObj.email }).fetch().then(data => data);
-  if (writer) {
-    return data.id;
-  }
-  return Writer.forge(writerObj).save().then(data => data.id);
-}
-
 router.route('/')
   .get((req, res, next) => {
     if (req.query.memory_id) {
@@ -26,9 +18,34 @@ router.route('/')
     }
   })
   .post((req, res, next) => {
-    const writerId = getSertWriter(req.body.writer).then(d => d);
-    Memory.forge({ message: req.body.memory, writer_id: writerId }).save().then((newMemory) => {
-      res.status(200).send({ memory: newMemory.toJSON() });
+    Writer.where({ email: req.body.writer.email }).fetch().then((fetchedWriter) => {
+      if (fetchedWriter) {
+        Memory.forge({ message: req.body.memory.message, writer_id: fetchedWriter.id }).save().then((newMemory) => {
+          res.status(200).send({
+            memory: {
+              message: newMemory.toJSON().message,
+              writer: {
+                name: fetchedWriter.toJSON().name,
+                email: fetchedWriter.toJSON().email,
+              },
+            },
+          });
+        });
+      } else {
+        Writer.forge({ name: req.body.writer.name, email: req.body.writer.email }).save().then((newWriter) => {
+          Memory.forge({ message: req.body.memory.message, writer_id: newWriter.toJSON().id }).save().then((newMemory) => {
+            res.status(200).send({
+              memory: {
+                message: newMemory.toJSON().message,
+                writer: {
+                  name: fetchedWriter.toJSON().name,
+                  email: fetchedWriter.toJSON().email,
+                },
+              },
+            });
+          });
+        });
+      }
     });
   });
 
