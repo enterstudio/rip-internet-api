@@ -15,7 +15,6 @@ app.use(cors());
 
 // API Routes
 app.use('/memorys', require('./memorys/routes'));
-app.use('/writers', require('./writers/routes'));
 
 // Start Server
 app.listen(port, () => {
